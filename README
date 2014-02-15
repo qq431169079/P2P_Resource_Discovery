@@ -1,0 +1,57 @@
+
+******************************
+c]In this project, we simulate a resource discovery and file sharing network using UDP and TCP sockets. The file hosting servers register(Phase 1) over UDP to a directory server by giving their TCP port numbers. Clients contact directory server providing the information of the file required for download over UDP. This is Discover phase. The directory server refers to the resource.txt, topology.txt and the registration details of file servers to reply back the client with contact details of the low cost file server(Phase 2).Then the client estabishes a TCP connection with the file server for file transfer.(Phase 3) 
+************************************************************************************************************************************************************************
+d]There are 3 .c files and a makefile
+  -> file_server.c - Forks 3 File Servers which register with Directory Server(UDP) and services clients which request for documuments/files(TCP)
+     *************
+  -> directory_server.c -Registers File Servers and creates directory.txt with their TCP port details. Accepts Discover requests from clients and responds with the cont
+     ******************
+act details of File server port for download(This file Forks UDP socket- One for Registration and other for Discovery)
+
+  -> client.c -Creates(Forks) 2 clients and sends Discover requests to Directory server and gets back the contact details of File Servers over UDP. Requests files from 
+     ********  
+FileServers over TCP.
+
+  -> makefile - provides option to build multiple targets.
+     *********
+     make all          : compiles file_server.c, directory_server.c and client.c to create executables "filesrv", "dirsrv" and "cli"
+     make <executable> : compiles that particular .c file
+     make clean        : removes <executables> 
+***********************************************************************************************************************************************************************     
+e] To run the programs
+   *******************
+  -> (topology.txt and resource.txt should be in the same folder as source files-Not included in the tar bundle)
+  -> make all
+  -> ./dirsrv  - to run directory server[Terminal 1]
+  -> ./filesrv - to run file_servers[Terminal 2]
+  -> ./cli     - to run the clients[Terminal 3]
+
+***********************************************************************************************************************************************************************
+f] Format of messages exchanged
+   *****************************
+   -> Registration Request: From File Servers to Directory Server
+      ********************
+		"File_Server# TCP_PORT#"
+
+   -> Discovery Request : From Clients to Directory Server
+      ***************** 
+		"Client# doc#"
+
+   -> Discovery Response: From Directory Server to clients
+      ******************
+	       "File_Server# TCP_PORT#"
+
+   -> File Sharing Request : From Client to File Server
+      ********************
+	       "Client# doc#"
+
+   -> File Sharing Response : From File Server to Client
+      *********************
+                "doc#" 
+
+**********************************************************************************************************************************************************************
+g] No idiosyncrasy in the project.
+Because of using fork() and parallelizing clients and file servers, order of onscreen and directory.txt print messages may vary.
+
+**************************************************************END****************************************************************************************************   
